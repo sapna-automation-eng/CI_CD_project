@@ -1,4 +1,4 @@
-name: Java CI (Simple Project)
+name: Java CI/CD
 
 on:
   push:
@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -19,8 +18,17 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Compile Java file
+      - name: Compile Java
         run: javac Main.java
 
-      - name: Run Java program
-        run: java Main
+      - name: Create output folder
+        run: mkdir -p output
+
+      - name: Move compiled file
+        run: mv Main.class output/
+
+      - name: Upload artifact (automation output)
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-build
+          path: output/
