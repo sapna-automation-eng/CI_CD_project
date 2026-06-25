@@ -2,33 +2,33 @@ name: Java CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  build:
+  build-test:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Compile Java
-        run: javac Main.java
+      - name: Compile
+        run: |
+          javac Main.java
+          javac TestMain.java
 
-      - name: Create output folder
-        run: mkdir -p output
+      - name: Run Tests
+        run: java TestMain
 
-      - name: Move compiled file
-        run: mv Main.class output/
+      - name: Create Deployment Folder
+        run: mkdir deploy
 
-      - name: Upload artifact (automation output)
-        uses: actions/upload-artifact@v4
-        with:
-          name: java-build
-          path: output/
+      - name: Simulated Deployment
+        run: echo Deployment Successful > deploy\result.txt
